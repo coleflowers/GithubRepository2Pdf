@@ -1,3 +1,4 @@
 *.tex
 vendor/*
 composer.lock
+tmp/*
