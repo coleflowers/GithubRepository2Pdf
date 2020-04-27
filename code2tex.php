@@ -11,6 +11,9 @@ for ($i = 1; $i < $argc; $i++) {
     $file = $argv[$i];
     $info = pathinfo($file);
     $name = $info['basename'];
+
+    $lan = lan($info['extension']);
+
     // $dirNew  = $info['dirname'] . '_new';
     // $newFile = $dirNew . '/' . $name;
 
@@ -22,7 +25,7 @@ for ($i = 1; $i < $argc; $i++) {
 
     $tpl = <<<str
 \\section*{{$file}}
-\\lstinputlisting[language=C++]{"$file"}
+\\lstinputlisting[language={$lan}]{"$file"}
 str;
     $body .= PHP_EOL . $tpl . PHP_EOL;
 }
@@ -36,6 +39,24 @@ file_put_contents('src.tex', $tex);
 echo 'Done!' . PHP_EOL;
 exit;
 
+function lan($ext)
+{
+    $map         = [];
+    $map['php']  = 'PHP';
+    $map['c']    = 'C';
+    $map['cpp']  = 'C++';
+    $map['h']    = 'C++';
+    $map['m']    = 'C';
+    $map['java'] = 'Java';
+    $map['el']   = 'elisp';
+    $map['tex']  = 'TeX';
+    $map['py']   = 'Python';
+    $map['go']   = 'Go';
+    $map['html'] = 'HTML';
+
+    return $map[$ext] ?? 'txt';
+}
+
 function foot()
 {
     $str = <<<str
@@ -45,6 +66,7 @@ function foot()
 str;
     return $str;
 }
+
 function head()
 {
     $str = <<<str
